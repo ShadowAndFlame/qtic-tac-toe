@@ -7,21 +7,24 @@ def test_square_creation():
     """Test creating a square."""
     square = Square()
     assert square.state == SquareState.Blank
+    assert square.marked == False
 
 def test_mark_square_x():
-    """Test setting a square to the X state"""
+    """Test setting a square to the X state."""
     square = Square()
     square.state = SquareState.X
     assert square.state == SquareState.X
+    assert square.marked == True
 
 def test_mark_square_o():
-    """Test setting a square to the O state"""
+    """Test setting a square to the O state."""
     square = Square()
     square.state = SquareState.O
     assert square.state == SquareState.O
+    assert square.marked == True
 
 def test_remark_marked_square():
-    """Test setting a marked square (forbidden if different)"""
+    """Test setting a marked square (forbidden if different)."""
     square = Square()
     square.state = SquareState.Blank
     square.state = SquareState.X
