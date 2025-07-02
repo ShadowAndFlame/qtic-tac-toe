@@ -20,4 +20,14 @@ class Square:
         Args:
             state (SquareState): Whether the square contains an X, an O, or is empty.
         """
-        self.state = state
+        self._state = state
+
+    @property
+    def state(self):
+        """Getter for the state."""
+        return self._state
+    
+    @state.setter
+    def state(self, state: SquareState) -> None:
+        """Setter for the state."""
+        self._state = state
