@@ -40,3 +40,11 @@ class Square:
     def marked(self) -> bool:
         """Whether the state has been changed from Blank."""
         return self.state != SquareState.Blank
+
+    def mark_x(self) -> None:
+        """Set state to X."""
+        self.state = SquareState.X
+    
+    def mark_o(self) -> None:
+        """Set state to O."""
+        self.state = SquareState.O

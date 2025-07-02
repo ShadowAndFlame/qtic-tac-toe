@@ -8,6 +8,8 @@ def test_square_creation():
     square = Square()
     assert square.state == SquareState.Blank
     assert square.marked == False
+    with pytest.raises(AttributeError):
+        square.marked = True # ty: ignore
 
 def test_mark_square_x():
     """Test setting a square to the X state."""
@@ -16,10 +18,20 @@ def test_mark_square_x():
     assert square.state == SquareState.X
     assert square.marked == True
 
+    square_alt = Square()
+    square_alt.mark_x()
+    assert square.state == SquareState.X
+    assert square.marked == True
+
 def test_mark_square_o():
     """Test setting a square to the O state."""
     square = Square()
     square.state = SquareState.O
+    assert square.state == SquareState.O
+    assert square.marked == True
+
+    square_alt = Square()
+    square_alt.mark_o()
     assert square.state == SquareState.O
     assert square.marked == True
 
@@ -31,3 +43,9 @@ def test_remark_marked_square():
     square.state = SquareState.X
     with pytest.raises(SquareStateError):
         square.state = SquareState.O
+    
+    square_alt = Square()
+    square_alt.mark_o()
+    square_alt.mark_o()
+    with pytest.raises(SquareStateError):
+        square_alt.mark_x()
