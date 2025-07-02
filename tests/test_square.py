@@ -1,7 +1,7 @@
 """Tests for the square submodule."""
 
 import pytest
-from src.models.square import Square, SquareState
+from src.models.square import Square, SquareState, SquareStateError
 
 def test_square_creation():
     """Test creating a square."""
@@ -19,3 +19,12 @@ def test_mark_square_o():
     square = Square()
     square.state = SquareState.O
     assert square.state == SquareState.O
+
+def test_remark_marked_square():
+    """Test setting a marked square (forbidden if different)"""
+    square = Square()
+    square.state = SquareState.Blank
+    square.state = SquareState.X
+    square.state = SquareState.X
+    with pytest.raises(SquareStateError):
+        square.state = SquareState.O
