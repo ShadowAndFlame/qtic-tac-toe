@@ -8,10 +8,6 @@ class SquareState(IntEnum):
     X = 1
     O = 2
 
-class SquareStateError(ValueError):
-    """There was an error setting the state of the Square."""
-    pass
-
 class Square:
     """Model for an individual square on the board."""
 
@@ -33,7 +29,7 @@ class Square:
     @state.setter
     def state(self, state: SquareState) -> None:
         if self.state != SquareState.Blank and self.state != state:
-            raise SquareStateError("Cannot overwrite marked square.")
+            raise AttributeError("Cannot overwrite marked square.")
         self._state = state
 
     @property
