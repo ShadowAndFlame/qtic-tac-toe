@@ -3,11 +3,20 @@
 from src.models.player import Player, PlayerSymbol
 from src.models.square import Square
 
+class MoveError(ValueError):
+    """Error related to making a move"""
+    pass
+
 class Board:
     """Model for the board state.
     
     The Board contains nine Squares in a 3x3 grid. Win condition is
     getting three in a row horizontally, vertically, or diagonally.
+
+    Attributes:
+        playerX (Player): The player who goes first.
+        playerO (Player): The player who goes second.
+        active_player (Player): The player whose turn is next.
     """
 
     def __init__(self, playerX: Player, playerO: Player) -> None:
@@ -21,6 +30,8 @@ class Board:
         self.playerX.symbol = PlayerSymbol.X
         self.playerO = playerO
         self.playerO.symbol = PlayerSymbol.O
+
+        self.active_player = self.playerX
     
         self._squares = [[Square() for _ in range(3)] for _ in range(3)]
     
@@ -32,3 +43,16 @@ class Board:
             col (int): The column from which to retrieve the square.
         """
         return self._squares[row][col]
+
+    def mark(self, row: int, col: int) -> None:
+        """Active player makes a move in the specified coordinates, turn passes.
+        
+        Args:
+            row (int): The row from which to retrieve the square.
+            col (int): The column from which to retrieve the square.
+        """
+        try:
+            self.square(row, col).state = self.active_player.symbol
+        except AttributeError:
+            raise MoveError("That square is already marked.")
+        self.active_player = self.playerX if self.active_player == self.playerO else self.playerO
