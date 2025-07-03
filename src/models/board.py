@@ -18,7 +18,9 @@ class Board:
             playerO (Player): The player who goes second.
         """
         self.playerX = playerX
+        self.playerX.symbol = PlayerSymbol.X
         self.playerO = playerO
+        self.playerO.symbol = PlayerSymbol.O
     
         self._squares = [[Square() for _ in range(3)] for _ in range(3)]
     

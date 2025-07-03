@@ -5,18 +5,26 @@ from src.models.player import Player, Robot, PlayerSymbol
 
 def test_player_creation():
     """Test the creation of a player."""
-    player = Player(PlayerSymbol.X)
-    assert player.symbol == PlayerSymbol.X
+    player = Player()
+    assert player.symbol == None
     assert player.robot == False
-    with pytest.raises(AttributeError):
-        player.symbol = PlayerSymbol.O # ty: ignore
-        player.robot = True # ty: ignore
 
 def test_robot_creation():
     """Test the creation of a robot."""
-    robot = Robot(PlayerSymbol.O)
-    assert robot.symbol == PlayerSymbol.O
-    assert robot.robot == True
+    player = Robot()
+    assert player.symbol == None
+    assert player.robot == True
+
+def test_player_symbol_assignment():
+    """Test assigning a symbol to a player."""
+    player = Player()
+    player.symbol = PlayerSymbol.X
+    assert player.symbol == PlayerSymbol.X
+
+def test_player_invalid_assignments():
+    """Test illegally assigning attributes to a player."""
+    player = Player()
+    player.symbol = PlayerSymbol.X
     with pytest.raises(AttributeError):
-        robot.symbol = PlayerSymbol.X # ty: ignore
-        robot.robot = False # ty: ignore
+        player.symbol = PlayerSymbol.O
+        player.robot = True # ty: ignore
