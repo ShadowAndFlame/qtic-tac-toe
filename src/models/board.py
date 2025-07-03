@@ -1,7 +1,7 @@
 """Model for the board state."""
 
 from src.models.player import Player, PlayerSymbol
-from src.models.square import Square
+from src.models.square import Square, SquareState
 
 class MoveError(ValueError):
     """Error related to making a move"""
@@ -33,7 +33,7 @@ class Board:
 
         self.active_player = self.playerX
     
-        self._squares = [[Square() for _ in range(3)] for _ in range(3)]
+        self._squares: list[list[Square]] = [[Square() for _ in range(3)] for _ in range(3)]
     
     def square(self, row: int, col: int) -> Square:
         """The Square object in the row and column specified.
@@ -56,3 +56,30 @@ class Board:
         except AttributeError:
             raise MoveError("That square is already marked.")
         self.active_player = self.playerX if self.active_player == self.playerO else self.playerO
+
+    @staticmethod
+    def three_alike(squares: list[Square]) -> SquareState | None:
+        for square in squares:
+            if square.state != squares[0].state or square.state == SquareState.Blank:
+                return None
+        return squares[0].state
+
+    @property
+    def winner(self) -> Player | None:
+        sets: list[list[Square]] = self._squares
+        sets = sets + [list(*l) for l in zip(self._squares)]
+        n = len(self._squares)
+        sets.append([self._squares[i][i] for i in range(n)])
+        sets.append([self._squares[i][n-i-1] for i in range(n)])
+
+        winners = [self.three_alike(set_) for set_ in sets]
+        if not any(winners):
+            return None
+        winners = [winner for winner in winners if winner]
+        if len(winners > 1):
+            raise MoveError("Something went wrong; there are multiple winners.")
+        winning_symbol = winners[0]
+        if winning_symbol == SquareState.X:
+            return self.playerX
+        else:
+            return self.playerO

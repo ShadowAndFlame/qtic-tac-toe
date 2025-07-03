@@ -31,3 +31,17 @@ def test_make_move():
     assert board.square(0,2).state == SquareState.X
     with pytest.raises(MoveError):
         board.mark(0,0)
+
+def test_board_winner():
+    """Test whether the board can identify a winner by board state."""
+    winner = Player()
+    board = Board(winner, Player())
+    assert not board.winner
+    for row in range(3):
+        assert not board.winner
+        board.mark(row, 0)
+        if row < 2:
+            assert not board.winner
+            board.mark(row, 1)
+    assert False
+    assert board.winner == winner
