@@ -3,7 +3,7 @@
 import pytest
 from PyQt5.QtWidgets import QApplication
 from src.gui.square_button import SquareButton
-from src.models.square import Square
+from src.models.square import Square, SquareState
 
 def setup_module():
     """Setup QApplication for all tests"""
@@ -17,3 +17,11 @@ def test_square_button_creation():
     square_button = SquareButton(square)
     assert square_button.square == square
 
+def test_square_button_state_change():
+    """Test to make sure the buttons shows the state of the square."""
+    square = Square()
+    square_button = SquareButton(square)
+    assert square_button.icon().isNull()
+    square_button.square.mark_x()
+    square_button.update_state()
+    assert not square_button.icon().isNull()
