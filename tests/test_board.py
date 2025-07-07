@@ -20,6 +20,50 @@ def test_board_creation():
         for col in range(3):
             assert board.square(row, col).state == SquareState.Blank
 
+def test_board_rows():
+    """Test the rows property."""
+    board = Board(Player(), Player())
+    rows_coords: list[list[tuple[int, int]]] = [
+        [(0,0), (0,1), (0,2)],
+        [(1,0), (1,1), (1,2)],
+        [(2,0), (2,1), (2,2)],
+    ]
+    rows = board.rows
+    assert len(rows) == len(rows_coords)
+    for row, row_coords in zip(rows, rows_coords):
+        assert len(row) == len(row_coords)
+        for square, coords in zip(row, row_coords):
+            assert square is board.square(*coords) # ty: ignore
+
+def test_board_columns():
+    """Test the columns property."""
+    board = Board(Player(), Player())
+    columns_coords: list[list[tuple[int, int]]] = [
+        [(0,0), (1,0), (2,0)],
+        [(0,1), (1,1), (2,1)],
+        [(0,2), (1,2), (2,2)],
+    ]
+    columns = board.columns
+    assert len(columns) == len(columns_coords)
+    for column, column_coords in zip(columns, columns_coords):
+        assert len(column) == len(column_coords)
+        for square, coords in zip(column, column_coords):
+            assert square is board.square(*coords) # ty: ignore
+
+def test_board_diagonals():
+    """Test the diagonals property."""
+    board = Board(Player(), Player())
+    diagonals_coords: list[list[tuple[int, int]]] = [
+        [(0,0), (1,1), (2,2)],
+        [(0,2), (1,1), (2,0)],
+    ]
+    diagonals = board.diagonals
+    assert len(diagonals) == len(diagonals_coords)
+    for diagonal, diagonal_coords in zip(diagonals, diagonals_coords):
+        assert len(diagonal) == len(diagonal_coords)
+        for square, coords in zip(diagonal, diagonal_coords):
+            assert square is board.square(*coords) # ty: ignore
+
 def test_make_move():
     """Test marking a square on a board."""
     board = Board(Player(), Player())
@@ -43,5 +87,4 @@ def test_board_winner():
         if row < 2:
             assert not board.winner
             board.mark(row, 1)
-    assert False
     assert board.winner == winner

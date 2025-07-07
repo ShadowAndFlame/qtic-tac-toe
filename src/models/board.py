@@ -63,6 +63,26 @@ class Board:
             if square.state != squares[0].state or square.state == SquareState.Blank:
                 return None
         return squares[0].state
+    
+    @property
+    def rows(self) -> list[list[Square]]:
+        """The rows of the board, 3 rows of 3 squares."""
+        return self._squares
+    
+    @property
+    def columns(self) -> list[list[Square]]:
+        """The columns of the board, 3 columns of 3 squares."""
+        return [list(l) for l in zip(*self._squares)]
+    
+    @property
+    def diagonals(self) -> list[list[Square]]:
+        """The diagonals of the board, 2 diagonals of 3 squares."""
+        n = len(self._squares)
+        diagonals = [
+            [self._squares[i][i] for i in range(n)],
+            [self._squares[i][n-i-1] for i in range(n)],
+        ]
+        return diagonals
 
     @property
     def winner(self) -> Player | None:
