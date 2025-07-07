@@ -80,7 +80,6 @@ def test_board_winner():
     """Test whether the board can identify a winner by board state."""
     winner = Player()
     board = Board(winner, Player())
-    assert not board.winner
     for row in range(3):
         assert not board.winner
         board.mark(row, 0)

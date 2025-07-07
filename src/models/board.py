@@ -59,6 +59,7 @@ class Board:
 
     @staticmethod
     def three_alike(squares: list[Square]) -> SquareState | None:
+        """The state of three alike squares, if they are."""
         for square in squares:
             if square.state != squares[0].state or square.state == SquareState.Blank:
                 return None
@@ -86,17 +87,13 @@ class Board:
 
     @property
     def winner(self) -> Player | None:
-        sets: list[list[Square]] = self._squares
-        sets = sets + [list(*l) for l in zip(self._squares)]
-        n = len(self._squares)
-        sets.append([self._squares[i][i] for i in range(n)])
-        sets.append([self._squares[i][n-i-1] for i in range(n)])
-
+        """A winner exists if there are three of a kind in any row, column, or diagonal."""
+        sets = self.rows + self.columns + self.diagonals
         winners = [self.three_alike(set_) for set_ in sets]
         if not any(winners):
             return None
         winners = [winner for winner in winners if winner]
-        if len(winners > 1):
+        if len(winners) > 1:
             raise MoveError("Something went wrong; there are multiple winners.")
         winning_symbol = winners[0]
         if winning_symbol == SquareState.X:
