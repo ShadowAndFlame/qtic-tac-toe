@@ -20,6 +20,10 @@ class MainWindow(QMainWindow):
     
     Attributes:
         board (Board): The model for the board where the game is played.
+        board_layout (QGridLayout): The layout containing SquareButtons.
+        play_button (QPushButton): The button that begins/resets a game.
+        playerX_box (QCheckBox): The checkbox determining if a human player goes first.
+        playerO_box (QCheckBox): The checkbox determining if a human player goes second.
     """
 
     def __init__(self):
@@ -38,24 +42,24 @@ class MainWindow(QMainWindow):
         options_layout = QHBoxLayout()
 
         options_layout.addWidget(QLabel("Player X:"))
-        self._playerX_box = QCheckBox()
-        self._playerX_box.setChecked(True)
-        options_layout.addWidget(self._playerX_box)
+        self.playerX_box = QCheckBox()
+        self.playerX_box.setChecked(True)
+        options_layout.addWidget(self.playerX_box)
 
-        self._play_button = QPushButton("PLAY")
-        self._play_button.clicked.connect(self.play)
-        self._play_button.setCheckable(True)
-        options_layout.addWidget(self._play_button)
+        self.play_button = QPushButton("PLAY")
+        self.play_button.clicked.connect(self.play)
+        self.play_button.setCheckable(True)
+        options_layout.addWidget(self.play_button)
 
         options_layout.addWidget(QLabel("Player O:"))
-        self._playerO_box = QCheckBox()
-        self._playerO_box.setChecked(True)
-        options_layout.addWidget(self._playerO_box)
+        self.playerO_box = QCheckBox()
+        self.playerO_box.setChecked(True)
+        options_layout.addWidget(self.playerO_box)
         
         main_layout.addLayout(options_layout)
 
-        self._board_layout = QGridLayout()
-        main_layout.addLayout(self._board_layout)
+        self.board_layout = QGridLayout()
+        main_layout.addLayout(self.board_layout)
 
         widget = QWidget()
         widget.setLayout(main_layout)
@@ -64,28 +68,28 @@ class MainWindow(QMainWindow):
     def play(self, checked: bool) -> None:
         """Begin a game."""
         if checked:
-            self._play_button.setText("RESET")
+            self.play_button.setText("RESET")
             self.board = Board(self.playerX, self.playerO)
             for row, row_squares in enumerate(self.board._squares):
                 for col, square in enumerate(row_squares):
                     square_button = SquareButton(square, row, col)
-                    self._board_layout.addWidget(square_button, row, col)
+                    self.board_layout.addWidget(square_button, row, col)
         else:
             self.clear_board()
             self.board = None
-            self._play_button.setText("PLAY")
-        self._playerX_box.setEnabled(not checked)
-        self._playerO_box.setEnabled(not checked)
+            self.play_button.setText("PLAY")
+        self.playerX_box.setEnabled(not checked)
+        self.playerO_box.setEnabled(not checked)
     
     def clear_board(self) -> None:
         """Delete all buttons in the board."""
-        for i in reversed(range(self._board_layout.count())):
-            self._board_layout.itemAt(i).widget().setParent(None)
+        for i in reversed(range(self.board_layout.count())):
+            self.board_layout.itemAt(i).widget().setParent(None)
 
     @property
     def playerX(self) -> Player:
         """The player taking the first turn."""
-        if self._playerX_box.isChecked():
+        if self.playerX_box.isChecked():
             return self._humanX
         else:
             return self._robotX
@@ -93,7 +97,7 @@ class MainWindow(QMainWindow):
     @property
     def playerO(self) -> Player:
         """The player taking the second turn."""
-        if self._playerO_box.isChecked():
+        if self.playerO_box.isChecked():
             return self._humanO
         else:
             return self._robotO
