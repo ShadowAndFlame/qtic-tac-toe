@@ -1,16 +1,9 @@
 """View/controller widget of an individual square."""
 
-from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtWidgets import QPushButton, QStyle
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QObject, QEvent
 from src.models.square import Square
-
-ICONS = [
-    QIcon(),
-    QIcon('src/gui/cross_button.png'),
-    QIcon('src/gui/tick_button.png')
-]
-"""Icons to display the state of a square. Indices match SquareState."""
 
 class SquareButton(QPushButton):
     """View/controller widget of an individual square."""
@@ -27,11 +20,20 @@ class SquareButton(QPushButton):
             col (int): The column of the square on the board.
         """
         super().__init__()
+        
+        self.icons = [
+            QIcon(),
+            self.style().standardIcon(QStyle.SP_DialogCancelButton), # ty: ignore
+            self.style().standardIcon(QStyle.SP_DialogNoButton), # ty: ignore
+        ]
+        
         self.square = square
         self.update_state()
         self.clicked.connect(lambda: self.clicked_coord.emit(row, col))
+        self.setFixedHeight(60)
+        self.setFixedWidth(60)
     
     def update_state(self):
         """Match state with that of the model."""
-        self.setIcon(ICONS[self.square.state])
+        self.setIcon(self.icons[self.square.state])
         self.blockSignals(self.square.state)
