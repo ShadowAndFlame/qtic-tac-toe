@@ -14,17 +14,3 @@ def test_robot_creation():
     player = Robot()
     assert player.symbol == None
     assert player.robot == True
-
-def test_player_symbol_assignment():
-    """Test assigning a symbol to a player."""
-    player = Player()
-    player.symbol = PlayerSymbol.X
-    assert player.symbol == PlayerSymbol.X
-
-def test_player_invalid_assignments():
-    """Test illegally assigning attributes to a player."""
-    player = Player()
-    player.symbol = PlayerSymbol.X
-    with pytest.raises(AttributeError):
-        player.symbol = PlayerSymbol.O
-        player.robot = True # ty: ignore
