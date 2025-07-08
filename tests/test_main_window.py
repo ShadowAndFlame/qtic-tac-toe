@@ -5,8 +5,9 @@ from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtCore import Qt
 from PyQt5.QtTest import QTest
 from src.gui.main_window import MainWindow
+from src.gui.square_button import SquareButton
 from src.models.player import Player
-from src.models.board import Board
+from src.models.square import Square, SquareState
 
 def setup_module():
     """Setup QApplication for all tests"""
@@ -71,3 +72,26 @@ def test_main_window_play():
     assert not window.playerO_box.isEnabled()
     assert window.board
     assert window.board_layout.count() == 9
+
+def test_main_window_button_click():
+    """Test clicking a square on the board."""
+    window = MainWindow()
+    QTest.mouseClick(window.play_button, Qt.LeftButton) # ty: ignore
+    
+    locs = [
+        (0,0, SquareState.X),
+        (0,1, SquareState.O),
+        (0,2, SquareState.X),
+    ]
+
+    for row, col, state in locs:
+        square: Square = window.board.square(row, col)
+        square_button: SquareButton = window.board_layout.itemAtPosition(row, col).widget()
+        assert square.state == SquareState.Blank
+        assert square_button.isEnabled()
+        assert square_button.icon().isNull()
+
+        QTest.mouseClick(square_button, Qt.LeftButton) # ty: ignore
+        assert square.state == state
+        assert not square_button.isEnabled()
+        assert not square_button.icon().isNull()

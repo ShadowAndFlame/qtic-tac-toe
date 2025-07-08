@@ -8,8 +8,7 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
     QGridLayout,
-    QWidget,
-    QApplication
+    QWidget
 )
 from src.gui.square_button import SquareButton
 from src.models.board import Board
@@ -73,6 +72,7 @@ class MainWindow(QMainWindow):
             for row, row_squares in enumerate(self.board._squares):
                 for col, square in enumerate(row_squares):
                     square_button = SquareButton(square, row, col)
+                    square_button.clicked.connect(lambda r=row, c=col: self.take_turn(r, c))
                     self.board_layout.addWidget(square_button, row, col)
         else:
             self.clear_board()
@@ -80,6 +80,12 @@ class MainWindow(QMainWindow):
             self.play_button.setText("PLAY")
         self.playerX_box.setEnabled(not checked)
         self.playerO_box.setEnabled(not checked)
+    
+    def take_turn(self, row: int, col: int):
+        """Take a turn at the specified coordinates"""
+        self.board.mark(row, col)
+        square_button: SquareButton = self.board_layout.itemAtPosition(row, col).widget()
+        square_button.update_state()
     
     def clear_board(self) -> None:
         """Delete all buttons in the board."""
