@@ -63,3 +63,11 @@ def test_main_window_play():
     assert window.playerO_box.isEnabled()
     assert not window.board
     assert window.board_layout.count() == 0
+    
+    QTest.mouseClick(window.play_button, Qt.LeftButton) # ty: ignore
+    assert window.play_button.isChecked()
+    assert window.play_button.text() == "RESET"
+    assert not window.playerX_box.isEnabled()
+    assert not window.playerO_box.isEnabled()
+    assert window.board
+    assert window.board_layout.count() == 9
