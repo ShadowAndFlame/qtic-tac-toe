@@ -44,6 +44,7 @@ class MainWindow(QMainWindow):
 
         self._play_button = QPushButton("PLAY")
         self._play_button.clicked.connect(self.play)
+        self._play_button.setCheckable(True)
         options_layout.addWidget(self._play_button)
 
         options_layout.addWidget(QLabel("Player O:"))
@@ -60,14 +61,21 @@ class MainWindow(QMainWindow):
         widget.setLayout(main_layout)
         self.setCentralWidget(widget)
     
-    def play(self) -> None:
+    def play(self, checked: bool) -> None:
         """Begin a game."""
-        self.clear_board()
-        self.board = Board(self.playerX, self.playerO)
-        for row, row_squares in enumerate(self.board._squares):
-            for col, square in enumerate(row_squares):
-                square_button = SquareButton(square, row, col)
-                self._board_layout.addWidget(square_button, row, col)
+        if checked:
+            self._play_button.setText("RESET")
+            self.board = Board(self.playerX, self.playerO)
+            for row, row_squares in enumerate(self.board._squares):
+                for col, square in enumerate(row_squares):
+                    square_button = SquareButton(square, row, col)
+                    self._board_layout.addWidget(square_button, row, col)
+        else:
+            self.clear_board()
+            self.board = None
+            self._play_button.setText("PLAY")
+        self._playerX_box.setEnabled(not checked)
+        self._playerO_box.setEnabled(not checked)
     
     def clear_board(self) -> None:
         """Delete all buttons in the board."""
