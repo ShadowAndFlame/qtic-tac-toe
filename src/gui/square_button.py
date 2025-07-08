@@ -34,4 +34,4 @@ class SquareButton(QPushButton):
     def update_state(self):
         """Match state with that of the model."""
         self.setIcon(ICONS[self.square.state])
-        self.setEnabled(not self.square.state)
+        self.blockSignals(self.square.state)

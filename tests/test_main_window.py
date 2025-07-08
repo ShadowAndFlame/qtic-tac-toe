@@ -82,16 +82,17 @@ def test_main_window_button_click():
         (0,0, SquareState.X),
         (0,1, SquareState.O),
         (0,2, SquareState.X),
+        (1,0, SquareState.O)
     ]
 
     for row, col, state in locs:
         square: Square = window.board.square(row, col)
         square_button: SquareButton = window.board_layout.itemAtPosition(row, col).widget()
         assert square.state == SquareState.Blank
-        assert square_button.isEnabled()
+        assert not square_button.signalsBlocked()
         assert square_button.icon().isNull()
 
         QTest.mouseClick(square_button, Qt.LeftButton) # ty: ignore
         assert square.state == state
-        assert not square_button.isEnabled()
+        assert square_button.signalsBlocked()
         assert not square_button.icon().isNull()

@@ -72,7 +72,7 @@ class MainWindow(QMainWindow):
             for row, row_squares in enumerate(self.board._squares):
                 for col, square in enumerate(row_squares):
                     square_button = SquareButton(square, row, col)
-                    square_button.clicked.connect(lambda r=row, c=col: self.take_turn(r, c))
+                    square_button.clicked_coord.connect(self.take_turn)
                     self.board_layout.addWidget(square_button, row, col)
         else:
             self.clear_board()
