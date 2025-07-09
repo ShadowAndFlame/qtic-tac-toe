@@ -14,9 +14,11 @@ def setup_module():
         app = QApplication([])
 
 @patch('PyQt5.QtWidgets.QMessageBox.information')
-def test_full_gameplay_pvp_x_winner(mock_infobox):
-    """Test a game between two humans where player X wins."""
+def test_full_gameplay_pvp_three_games(mock_infobox):
+    """Test three games between two humans."""
     window = MainWindow()
+
+    # Test game where X wins
     QTest.mouseClick(window.play_button, Qt.LeftButton) # ty: ignore
 
     movelist = [
@@ -38,10 +40,7 @@ def test_full_gameplay_pvp_x_winner(mock_infobox):
     )
     assert not window.board
 
-@patch('PyQt5.QtWidgets.QMessageBox.information')
-def test_full_gameplay_pvp_o_winner(mock_infobox):
-    """Test a game between two humans where player O wins."""
-    window = MainWindow()
+    # Test game where O wins
     QTest.mouseClick(window.play_button, Qt.LeftButton) # ty: ignore
 
     movelist = [
@@ -61,11 +60,8 @@ def test_full_gameplay_pvp_o_winner(mock_infobox):
         "Player O has won the game!"
     )
     assert not window.board
-
-@patch('PyQt5.QtWidgets.QMessageBox.information')
-def test_full_gameplay_pvp_tie(mock_infobox):
-    """Test a game between two humans where there is a tie."""
-    window = MainWindow()
+    
+    # Test game where there's a tie
     QTest.mouseClick(window.play_button, Qt.LeftButton) # ty: ignore
 
     movelist = [

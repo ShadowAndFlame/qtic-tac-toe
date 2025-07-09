@@ -81,6 +81,7 @@ class MainWindow(QMainWindow):
             self.play_button.setText("PLAY")
         self.playerX_box.setEnabled(not checked)
         self.playerO_box.setEnabled(not checked)
+        self.play_button.setChecked(checked)
     
     def take_turn(self, row: int, col: int):
         """Take a turn at the specified coordinates"""
