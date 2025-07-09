@@ -8,7 +8,8 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
     QGridLayout,
-    QWidget
+    QWidget,
+    QMessageBox,
 )
 from src.gui.square_button import SquareButton
 from src.models.board import Board
@@ -86,11 +87,19 @@ class MainWindow(QMainWindow):
         self.board.mark(row, col)
         square_button: SquareButton = self.board_layout.itemAtPosition(row, col).widget()
         square_button.update_state()
+        self.check_winner()
     
     def clear_board(self) -> None:
         """Delete all buttons in the board."""
         for i in reversed(range(self.board_layout.count())):
             self.board_layout.itemAt(i).widget().setParent(None)
+    
+    def check_winner(self) -> None:
+        winner = self.board.winner
+        if winner:
+            winner_str = "Player X" if winner == self.playerX else "Player O"
+            QMessageBox.information(self, "Congratulations!", f"{winner_str} has won the game!")
+            self.play(False)
 
     @property
     def playerX(self) -> Player:
