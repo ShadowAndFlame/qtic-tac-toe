@@ -87,3 +87,22 @@ def test_board_winner():
             assert not board.winner
             board.mark(row, 1)
     assert board.winner == winner
+
+def test_board_tie():
+    """Test whether the board can identify a tie."""
+    board = Board(Player(),Player())
+    movelist = [
+        (0,0),
+        (1,1),
+        (2,0),
+        (1,0),
+        (1,2),
+        (0,1),
+        (2,1),
+        (2,2),
+        (0,2),
+    ]
+    for row, col in movelist:
+        assert not board.tie
+        board.mark(row, col)
+    assert board.tie

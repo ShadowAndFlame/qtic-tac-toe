@@ -100,6 +100,9 @@ class MainWindow(QMainWindow):
             winner_str = "Player X" if winner == self.playerX else "Player O"
             QMessageBox.information(self, "Congratulations!", f"{winner_str} has won the game!")
             self.play(False)
+        elif self.board.tie:
+            QMessageBox.information(self, "Tie!", "It's a tie, nobody wins.")
+            self.play(False)
 
     @property
     def playerX(self) -> Player:

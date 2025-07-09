@@ -61,3 +61,30 @@ def test_full_gameplay_pvp_o_winner(mock_infobox):
         "Player O has won the game!"
     )
     assert not window.board
+
+@patch('PyQt5.QtWidgets.QMessageBox.information')
+def test_full_gameplay_pvp_tie(mock_infobox):
+    """Test a game between two humans where there is a tie."""
+    window = MainWindow()
+    QTest.mouseClick(window.play_button, Qt.LeftButton) # ty: ignore
+
+    movelist = [
+        (0,0),
+        (1,1),
+        (2,0),
+        (1,0),
+        (1,2),
+        (0,1),
+        (2,1),
+        (2,2),
+        (0,2),
+    ]
+    for row, col in movelist:
+        square_button = window.board_layout.itemAtPosition(row, col).widget()
+        QTest.mouseClick(square_button, Qt.LeftButton) # ty: ignore
+    mock_infobox.assert_called_with(
+        window,
+        "Tie!",
+        "It's a tie, nobody wins."
+    )
+    assert not window.board

@@ -100,3 +100,11 @@ class Board:
             return self.playerX
         else:
             return self.playerO
+
+    @property
+    def tie(self) -> bool:
+        for row in self._squares:
+            for square in row:
+                if square.state == SquareState.Blank:
+                    return False
+        return not self.winner
