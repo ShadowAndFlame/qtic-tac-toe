@@ -66,6 +66,16 @@ class Board:
         return squares[0].state
     
     @property
+    def squares_flat(self) -> list[Square]:
+        """Just a flat list of squares."""
+        return [square for row in self._squares for square in row]
+    
+    @property
+    def empty_squares(self) -> list[Square]:
+        """Flat list of squares that are empty, i.e. available to make a move in."""
+        return [square for square in self.squares_flat if not square.marked]
+    
+    @property
     def rows(self) -> list[list[Square]]:
         """The rows of the board, 3 rows of 3 squares."""
         return self._squares
@@ -103,8 +113,4 @@ class Board:
 
     @property
     def tie(self) -> bool:
-        for row in self._squares:
-            for square in row:
-                if square.state == SquareState.Blank:
-                    return False
-        return not self.winner
+        return not self.empty_squares and not self.winner

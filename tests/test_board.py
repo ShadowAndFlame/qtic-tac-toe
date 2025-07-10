@@ -64,15 +64,24 @@ def test_board_diagonals():
         for square, coords in zip(diagonal, diagonal_coords):
             assert square is board.square(*coords) # ty: ignore
 
+def test_board_squares_flat():
+    """Test getting a flat list of squares."""
+    board = Board(Player(), Player())
+    flat_list = board.squares_flat
+    assert len(flat_list) == 9
+
 def test_make_move():
     """Test marking a square on a board."""
     board = Board(Player(), Player())
     board.mark(0,0)
     assert board.square(0,0).state == SquareState.X
+    assert board.square(0,0) not in board.empty_squares
     board.mark(0,1)
     assert board.square(0,1).state == SquareState.O
+    assert board.square(0,1) not in board.empty_squares
     board.mark(0,2)
     assert board.square(0,2).state == SquareState.X
+    assert board.square(0,2) not in board.empty_squares
     with pytest.raises(MoveError):
         board.mark(0,0)
 
