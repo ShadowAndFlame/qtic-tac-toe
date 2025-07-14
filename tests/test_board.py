@@ -75,13 +75,13 @@ def test_make_move():
     board = Board(Player(), Player())
     board.mark(0,0)
     assert board.square(0,0).state == SquareState.X
-    assert board.square(0,0) not in board.empty_squares
+    assert (0,0) not in board.empty_square_coords
     board.mark(0,1)
     assert board.square(0,1).state == SquareState.O
-    assert board.square(0,1) not in board.empty_squares
+    assert (0,1) not in board.empty_square_coords
     board.mark(0,2)
     assert board.square(0,2).state == SquareState.X
-    assert board.square(0,2) not in board.empty_squares
+    assert (0,2) not in board.empty_square_coords
     with pytest.raises(MoveError):
         board.mark(0,0)
 

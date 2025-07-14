@@ -71,9 +71,14 @@ class Board:
         return [square for row in self._squares for square in row]
     
     @property
-    def empty_squares(self) -> list[Square]:
+    def empty_square_coords(self) -> list[tuple[int, int]]:
         """Flat list of squares that are empty, i.e. available to make a move in."""
-        return [square for square in self.squares_flat if not square.marked]
+        empty_square_coords: list[tuple[int, int]] = []
+        for row, row_squares in enumerate(self._squares):
+            for col, square in enumerate(row_squares):
+                if not square.marked:
+                    empty_square_coords.append((row, col))
+        return empty_square_coords
     
     @property
     def rows(self) -> list[list[Square]]:
@@ -113,4 +118,4 @@ class Board:
 
     @property
     def tie(self) -> bool:
-        return not self.empty_squares and not self.winner
+        return not self.empty_square_coords and not self.winner
