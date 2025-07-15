@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import (
     QWidget,
     QMessageBox,
 )
+from PyQt5.QtCore import pyqtSignal
 from src.gui.square_button import SquareButton
 from src.models.board import Board
 from src.models.player import Player, Robot
@@ -25,6 +26,8 @@ class MainWindow(QMainWindow):
         playerX_box (QCheckBox): The checkbox determining if a human player goes first.
         playerO_box (QCheckBox): The checkbox determining if a human player goes second.
     """
+
+    turn_taken = pyqtSignal()
 
     def __init__(self):
         """Initialize the MainWindow object."""
@@ -64,6 +67,8 @@ class MainWindow(QMainWindow):
         widget = QWidget()
         widget.setLayout(main_layout)
         self.setCentralWidget(widget)
+
+        self.turn_taken.connect(self.ask_robot)
     
     def play(self, checked: bool) -> None:
         """Begin a game."""
@@ -82,6 +87,7 @@ class MainWindow(QMainWindow):
         self.playerX_box.setEnabled(not checked)
         self.playerO_box.setEnabled(not checked)
         self.play_button.setChecked(checked)
+        self.ask_robot()
     
     def take_turn(self, row: int, col: int):
         """Take a turn at the specified coordinates"""
@@ -90,6 +96,12 @@ class MainWindow(QMainWindow):
         square_button.update_state()
         self.check_winner()
     
+    def ask_robot(self):
+        """Check for robot auto-moves."""
+        if self.board and self.board.active_player.robot:
+            move = self.board.active_player.best_move(self.board)
+            self.take_turn(*move)
+
     def clear_board(self) -> None:
         """Delete all buttons in the board."""
         for i in reversed(range(self.board_layout.count())):
@@ -104,6 +116,8 @@ class MainWindow(QMainWindow):
         elif self.board.tie:
             QMessageBox.information(self, "Tie!", "It's a tie, nobody wins.")
             self.play(False)
+        else:
+            self.turn_taken.emit()
 
     @property
     def playerX(self) -> Player:

@@ -84,3 +84,23 @@ def test_full_gameplay_pvp_three_games(mock_infobox):
         "It's a tie, nobody wins."
     )
     assert not window.board
+
+@patch('PyQt5.QtWidgets.QMessageBox.information')
+def test_full_gameplay_rvr_three_games(mock_infobox):
+    """Test three games between robots."""
+    window = MainWindow()
+    window.playerX_box.click()
+    window.playerO_box.click()
+    QTest.mouseClick(window.play_button, Qt.LeftButton) # ty: ignore
+    assert mock_infobox.call_count == 1
+    assert not window.board
+
+    # Test followup game.
+    QTest.mouseClick(window.play_button, Qt.LeftButton) # ty: ignore
+    assert mock_infobox.call_count == 2
+    assert not window.board
+
+    # Test followup game.
+    QTest.mouseClick(window.play_button, Qt.LeftButton) # ty: ignore
+    assert mock_infobox.call_count == 3
+    assert not window.board

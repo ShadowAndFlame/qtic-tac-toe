@@ -96,3 +96,22 @@ def test_main_window_button_click():
         assert square.state == state
         assert square_button.signalsBlocked()
         assert not square_button.icon().isNull()
+
+def test_robot_move():
+    """Test allowing a robot to make a move"""
+    window = MainWindow()
+    # Test robot first
+    window.playerX_box.click()
+    QTest.mouseClick(window.play_button, Qt.LeftButton) # ty: ignore
+    assert window.board.active_player == window.playerO
+
+    # Test robot second
+    QTest.mouseClick(window.play_button, Qt.LeftButton) # ty: ignore
+    window.playerX_box.click()
+    window.playerO_box.click()
+    QTest.mouseClick(window.play_button, Qt.LeftButton) # ty: ignore
+    assert window.board.active_player == window.playerX
+    button = window.board_layout.itemAtPosition(0,0).widget()
+    QTest.mouseClick(button, Qt.LeftButton) # ty: ignore
+    assert window.board.active_player == window.playerX
+    
